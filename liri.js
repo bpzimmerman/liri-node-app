@@ -6,6 +6,7 @@ var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
 var inquirer = require('inquirer');
 var moment = require('moment');
+var chalk = require('chalk');
 
 var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
@@ -65,7 +66,7 @@ inquirer
                     tweets.statuses.forEach(function(item){
                         var tweetTime = moment(item.created_at, 'ddd MMM DD HH:mm:ss ZZ YYYY').format('lll');
                         var tweetText = item.text;
-                        console.log("\n" + tweetTime + ":");
+                        console.log("\n" + chalk.bold(tweetTime + ":"));
                         console.log(tweetText);
                     })
                 });
@@ -80,25 +81,49 @@ inquirer
                         console.log("Error occurred: " + error);
                         return;
                     };
-                    var info = data.tracks.items[0];
-                    console.log("\nSong:");
-                    console.log(" " + info.name);
-                    console.log("\nAlbum:");
-                    console.log(" " + info.album.name);
-                    console.log("\nArtist(s):");
-                    info.artists.forEach(function(item){
-                        console.log(" " + item.name);
+                    var sngInfo = data.tracks.items[0];
+                    console.log("\n" + chalk.bold("Song:"));
+                    console.log(sngInfo.name);
+                    console.log("\n" + chalk.bold("Album:"));
+                    console.log(sngInfo.album.name);
+                    console.log("\n" + chalk.bold("Artist(s):"));
+                    sngInfo.artists.forEach(function(item){
+                        console.log(item.name);
                     });
-                    console.log("\nPreview:");
-                    console.log(" " + info.preview_url);
+                    console.log("\n" + chalk.bold("Preview:"));
+                    console.log(sngInfo.preview_url);
                 });
                 break;
             case "movie-this":
-                var mov = inqResponse.movie.trim();
-                if (mov === ""){
-                    mov = movieDefault;
+                var movie = inqResponse.movie.trim();
+                if (movie === ""){
+                    movie = movieDefault;
                 };
-                console.log("movie info under construction");
+                var mov = movie.replace(/\s/g, "+");
+                var omdbQueryUrl = "http://www.omdbapi.com/?t=" + mov + "&y=&plot=short&apikey=trilogy";
+                request(omdbQueryUrl, function(error, response, body) {
+                    if (error) {
+                        console.log("Error occurred: " + error);
+                        return;
+                    };
+                    var movInfo = JSON.parse(body);
+                    console.log("\n" + chalk.bold("Title:"));
+                    console.log(movInfo.Title)
+                    console.log("\n" + chalk.bold("Release Date:"));
+                    console.log(movInfo.Released);
+                    console.log("\n" + chalk.bold("IMDB Rating:"));
+                    console.log(movInfo.Ratings[0].Value);
+                    console.log("\n" + chalk.bold("Rotten Tomatoes Rating:"));
+                    console.log(movInfo.Ratings[1].Value);
+                    console.log("\n" + chalk.bold("Produced In:"));
+                    console.log(movInfo.Country);
+                    console.log("\n" + chalk.bold("Language:"));
+                    console.log(movInfo.Language);
+                    console.log("\n" + chalk.bold("Plot:"));
+                    console.log(movInfo.Plot);
+                    console.log("\n" + chalk.bold("Actors:"));
+                    console.log(movInfo.Actors);
+                  });
                 break;
             case "do-what-it-says":
                 console.log("do-what-it-says under construction");
