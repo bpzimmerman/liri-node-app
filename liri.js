@@ -32,7 +32,7 @@ function twitFunction(cmdLine, twitArg){
         // checks to see if the twitter account is found
         if (tweets.statuses.length === 0){
             console.log("\nI could not find that account! Please try again.")
-            addLog(cmdLine, twitArg, "Account not found.\r\r");
+            tweetData =  "Account not found.\r\r";
         } else {
             // loops through the array returned from twitter
             tweets.statuses.forEach(function(item){
@@ -46,9 +46,9 @@ function twitFunction(cmdLine, twitArg){
                 console.log("\n" + chalk.bold(tweetTime + ":"));
                 console.log(tweetText);
             });
-            // calls the function that appends the data to the log.txt file
-            addLog(cmdLine, twitArg, tweetData);
-        }
+        };
+        // calls the function that appends the data to the log.txt file
+        addLog(cmdLine, twitArg, tweetData);
     });
 };
 
@@ -61,10 +61,11 @@ function sngFunction(cmdLine, sngArg){
             return;
         };
         var sngInfo = data.tracks.items[0];
+        var sngData = "";
         // checks to see if the song is found
         if (sngInfo === undefined){
             console.log("\nI could not find that song! Please try again.");
-            addLog(cmdLine, sngArg, "Song not found.\r\r");
+            sngData = "Song not found.\r\r";
         } else {
             // posts the song data with some formating
             console.log("\n" + chalk.bold("Song:"));
@@ -85,10 +86,11 @@ function sngFunction(cmdLine, sngArg){
             console.log("\n" + chalk.bold("Preview:"));
             console.log(sngInfo.preview_url);
             // builds the variable storing all the song data
-            var sngData = "Song:\r" + sngInfo.name + "\r\rAlbum:\r" + sngInfo.album.name + "\r\rArtist(s):\r" + artistList + "\r\rPreview:\r" + sngInfo.preview_url + "\r\r";
+            sngData = "Song:\r" + sngInfo.name + "\r\rAlbum:\r" + sngInfo.album.name + "\r\rArtist(s):\r" + artistList + "\r\rPreview:\r" + sngInfo.preview_url + "\r\r";
             // calls the function that appends the data to the log.txt file
-            addLog(cmdLine, sngArg, sngData);
         };
+        // calls the function that appends the data to the log.txt file
+        addLog(cmdLine, sngArg, sngData);
     });
 };
 
@@ -105,10 +107,11 @@ function movFunction(cmdLine, movArg){
             return;
         };
         var movInfo = JSON.parse(body);
+        var movData = "";
         // checks to see if the movie is found
         if (movInfo.Error) {
             console.log("\nI could not find that movie! Please try again.");
-            addLog(cmdLine, movArg, "Movie not found.\r\r");
+            movData = "Movie not found.\r\r";
         } else {
             // posts the movie data with some formating
             console.log("\n" + chalk.bold("Title:"));
@@ -134,10 +137,10 @@ function movFunction(cmdLine, movArg){
             console.log("\n" + chalk.bold("Actors:"));
             console.log(movInfo.Actors);
             // builds the variable storing all the movie data
-            var movData = "Title:\r" + movInfo.Title + "\r\rRelease Date:\r" + movInfo.Released + "\r\rIMDB Rating:\r" + movInfo.Ratings[0].Value + "\r\rRotten Tomatoes Rating:\r" + rtRating + "\r\rProduced In:\r" + movInfo.Country + "\r\rLanguage:\r" + movInfo.Language + "\r\rPlot:\r" + movInfo.Plot + "\r\rActors:\r" + movInfo.Actors + "\r\r";
-            // calls the function that appends the data to the log.txt file
-            addLog(cmdLine, movArg, movData);
+            movData = "Title:\r" + movInfo.Title + "\r\rRelease Date:\r" + movInfo.Released + "\r\rIMDB Rating:\r" + movInfo.Ratings[0].Value + "\r\rRotten Tomatoes Rating:\r" + rtRating + "\r\rProduced In:\r" + movInfo.Country + "\r\rLanguage:\r" + movInfo.Language + "\r\rPlot:\r" + movInfo.Plot + "\r\rActors:\r" + movInfo.Actors + "\r\r";
         };
+        // calls the function that appends the data to the log.txt file
+        addLog(cmdLine, movArg, movData);
     });
 };
 
